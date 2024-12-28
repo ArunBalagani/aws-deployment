@@ -1,0 +1,28 @@
+1. Navigate to Frontend Directory:
+
+cd ../frontend
+
+
+2. Install Dependencies:
+
+npm install
+
+3. Set Environment Variables: Create a .env file with the backend API URL:
+
+nano .env
+
+Example:
+
+REACT_APP_API_URL=http://<instance-ip>:5000/api
+
+4. Build the Frontend:
+
+npm run build
+
+5. Move Build Files to Web Directory:
+
+sudo mv build/* /var/www/html
+
+
+
+

@@ -1,0 +1,9 @@
+1. Navigate to Deployment Directory:
+
+cd /var/www
+
+
+2. Clone the Git Repository:
+
+sudo git clone https://github.com/ArunBalagani/crud-app.git
+cd crud-app

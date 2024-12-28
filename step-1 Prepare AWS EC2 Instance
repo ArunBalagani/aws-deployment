@@ -1,0 +1,26 @@
+Step 1: Prepare AWS EC2 Instance
+1. Launch an EC2 Instance:
+
+Choose an AMI (e.g., Ubuntu 22.04).
+Select instance type (t2.micro is sufficient for basic deployments).
+Configure security groups:
+Allow HTTP (port 80) and HTTPS (port 443).
+Allow SSH (port 22) for your IP.
+
+2. Login to the Instance:
+
+ssh -i <your-key.pem> ubuntu@<instance-ip>
+
+
+3. Update the System:
+
+sudo apt update && sudo apt upgrade -y
+
+4. Install Required Tools:
+
+sudo apt install git nginx curl -y
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt install nodejs -y
+sudo npm install -g pm2
+
+

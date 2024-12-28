@@ -1,0 +1,103 @@
+Setting Up MongoDB for Your AWS Deployment
+To deploy and integrate MongoDB for your CRUD application on AWS, you can choose between the following options:
+
+Option 1: Use MongoDB Atlas (Cloud-Based)
+
+MongoDB Atlas is a fully managed cloud database. It's easy to set up and connect to your AWS-deployed app.
+
+1. Create a MongoDB Atlas Account:
+
+Visit MongoDB Atlas.
+Sign up and create a new cluster.
+
+2. Set Up Your Cluster:
+
+Select a cloud provider (AWS, GCP, or Azure) and region close to your EC2 instance.
+Click "Create Cluster."
+
+3. Whitelist IP Address:
+
+Go to Network Access in the Atlas dashboard.
+Add your EC2 instance's public IP or use 0.0.0.0/0 (not recommended for production).
+
+4. Create a Database and User:
+
+Go to Database Access.
+Create a new user with a username and password.
+Assign roles like readWriteAnyDatabase.
+
+5. Get Connection String:
+
+Go to Clusters > Connect > Connect Your Application.
+Copy the connection string:
+
+mongodb+srv://<username>:<password>@cluster.mongodb.net/<dbname>?retryWrites=true&w=majority
+
+6. Add to .env File: In your backend .env file:
+
+MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/<dbname>?retryWrites=true&w=majority
+
+
+Option 2: Install MongoDB on AWS EC2 Instance
+
+If you prefer hosting MongoDB on the same EC2 instance as your app:
+
+1. Install MongoDB:
+
+wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+sudo apt update
+sudo apt install -y mongodb-org
+
+2. Start MongoDB:
+
+sudo systemctl start mongod
+sudo systemctl enable mongod
+
+3. Verify Installation:
+
+mongo --eval 'db.runCommand({ connectionStatus: 1 })'
+
+
+4. Allow External Connections: Edit the MongoDB configuration file:
+
+sudo nano /etc/mongod.conf
+
+Change bindIp: 127.0.0.1 to bindIp: 0.0.0.0.
+
+Restart MongoDB:
+
+sudo systemctl restart mongod
+
+5. Open MongoDB Port (Default 27017): Update your AWS Security Group to allow inbound traffic on port 27017.
+
+6. Update .env File:
+
+MONGO_URI=mongodb://<ec2-public-ip>:27017/<dbname>
+
+Testing the MongoDB Connection
+
+1. In your backend code, verify the connection in server.js:
+
+const mongoose = require("mongoose");
+
+mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}).then(() => {
+    console.log("MongoDB Connected...");
+}).catch(err => {
+    console.error("MongoDB connection error:", err);
+});
+
+
+2. Restart the backend:
+
+pm2 restart crud-backend
+
+
+3. Test the connection:
+
+Use your app to create or fetch data.
+Verify the data is stored in the MongoDB database.
+

@@ -1,0 +1,7 @@
+1. Open your browser and visit:
+
+Frontend: http://<instance-ip>
+Backend API: http://<instance-ip>/api
+
+2. If everything is configured correctly, the frontend and backend should work seamlessly.
+
